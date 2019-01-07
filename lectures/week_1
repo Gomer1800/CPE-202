@@ -1,0 +1,5 @@
+Couple Tips for code:
+1) write your function first
+2) design your test case before implementation
+
+Abstract Data Types (ADT's) : We'll be looking at various examples and asking the question, what are the different ways of implementing this? For example a Qeue
