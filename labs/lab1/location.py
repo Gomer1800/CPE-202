@@ -1,3 +1,4 @@
+# Luis Gomez
 # CPE 202 Location Class, Lab 1
 
 # represents a location using name, latitude and longitude
@@ -7,7 +8,15 @@ class Location:
         self.lat = lat      # latitude in degrees (-90 to 90)
         self.lon = lon      # longitude in degrees (-180 to 180)
 
-# ADD BOILERPLATE HERE (__eq__ and __repr__ functions)
+    def __eq__(self, other):
+        return ((type(other) == Location)
+                and self.name == other.name
+                and self.lat == other.lat
+                and self.lon == other.lon
+                )
+
+    def __repr__(self):
+        return ("Location({!r}, {!r}, {!r})".format(self.name, self.lat, self.lon))
 
 def main():
     loc1 = Location("SLO", 35.3, -120.7)

@@ -1,3 +1,4 @@
+# Luis Gomez
 # CPE 202 Lab 1 Test Cases
 
 import unittest
@@ -11,15 +12,38 @@ class TestLab1(unittest.TestCase):
         tlist = None
         with self.assertRaises(ValueError):  # used to check for exception
             max_list_iter(tlist)
+    
+    def test_max_list_iter_2(self):
+        """Tests function with an array of ints and floats with no ordering"""
+        tlist = [10, 9, 11, 0, 100.1, 100]
+        self.assertEqual(max_list_iter(tlist), 100.1)
 
     def test_reverse_rec(self):
         self.assertEqual(reverse_rec([1,2,3]),[3,2,1])
+    
+    def test_reverse_rec_2(self):
+        """Tests function using an array of numbers, chars, and strings"""
+        self.assertEqual(reverse_rec([1,'A', 1.0, "0x10", -5]),[-5,"0x10",1.0,'A',1])
 
     def test_bin_search(self):
         list_val =[0,1,2,3,4,7,8,9,10]
         low = 0
         high = len(list_val)-1
         self.assertEqual(bin_search(4, 0, len(list_val)-1, list_val), 4 )
+
+    def test_bin_search_2(self):
+        """Tests function with array of negative and postive ints, searching for value 7 @ index 3"""
+        list_val =[-5, -1, 3, 7, 100]
+        low = 0
+        high = len(list_val)-1
+        self.assertEqual(bin_search(7, 0, len(list_val)-1, list_val), 3 )
+
+    def test_bin_search_3(self):
+        """Tests function with target not found in list, expects None"""
+        list_val =[-5, -1, 3, 3.9, 4.1, 7, 100]
+        low = 0
+        high = len(list_val)-1
+        self.assertEqual(bin_search(4, 0, len(list_val)-1, list_val), None )
 
 if __name__ == "__main__":
         unittest.main()
