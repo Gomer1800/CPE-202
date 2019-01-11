@@ -37,13 +37,23 @@ class TestLab1(unittest.TestCase):
         low = 0
         high = len(list_val)-1
         self.assertEqual(bin_search(7, 0, len(list_val)-1, list_val), 3 )
+        self.assertEqual(bin_search(-1, 0, len(list_val)-1, list_val), 1 )
 
     def test_bin_search_3(self):
-        """Tests function with target not found in list, expects None"""
+        """Tests function with targets not found in list, expects None"""
         list_val =[-5, -1, 3, 3.9, 4.1, 7, 100]
         low = 0
         high = len(list_val)-1
         self.assertEqual(bin_search(4, 0, len(list_val)-1, list_val), None )
+        self.assertEqual(bin_search(-6, 0, len(list_val)-1, list_val), None )
+
+    def test_bin_search_4(self):
+        """Tests boundary conditions"""
+        list_val =[-5, -1, 3, 3.9, 4.1, 7, 100, 100.5]
+        low = 0
+        high = len(list_val)-1
+        self.assertEqual(bin_search(100.5, 0, len(list_val)-1, list_val), len(list_val)-1)
+        self.assertEqual(bin_search(-5, 0, len(list_val)-1, list_val), 0)
 
 if __name__ == "__main__":
         unittest.main()
