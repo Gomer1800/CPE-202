@@ -1,3 +1,6 @@
+# Luis Gomez
+# CPE 202
+
 import unittest
 from stack_linked import *
         
@@ -55,6 +58,75 @@ class TestLab2(unittest.TestCase):
         init_stack = Node(2, Node(1, None))
         stack = Stack(5, init_stack)
         self.assertEqual(stack.__repr__(), "Stack(5, Node(2, Node(1, None)))")
+
+    def test_is_empty(self):
+        """Creating and testing empty stack"""
+        stack = Stack(5)
+        self.assertEqual(stack.is_empty(), True)
+        """Testing non-empty stack"""
+        node1 = Node(1)
+        stack = Stack(5, node1)
+        self.assertEqual(stack.is_empty(), False)
+
+    def test_is_full(self):
+        """Creating full stack"""
+        nodes = Node( 1, Node( 2, Node(3, Node(4, Node(5)))))
+        stack = Stack(5, nodes) 
+        self.assertEqual(stack.is_full(), True)
+        """Testing empty stack"""
+        stack2 = Stack(5)
+        self.assertEqual(stack2.is_full(), False) 
+
+    def test_push(self):
+        """Creating half-empty stack"""
+        nodes = Node(3, Node (2, Node(1)))
+        stack = Stack(4, nodes)
+        """Pushing node"""
+        stack.push(Node(4))
+        self.assertEqual(stack.__repr__(), "Stack(4, Node(4, Node(3, Node(2, Node(1, None)))))")
+        """Stack is full, push returns index error"""
+        with self.assertRaises(IndexError):
+            stack.push( Node(5) )
+
+    def test_pop(self):
+        """Create full stack"""
+        nodes = Node(4, Node(3, Node (2, Node(1))))
+        stack = Stack(4, nodes)
+        self.assertEqual(stack.__repr__(), "Stack(4, Node(4, Node(3, Node(2, Node(1, None)))))")
+        """Testing if pop returns Node with empty next pointer"""
+        self.assertEqual(stack.pop(), Node(4, None) )
+        """Stack should now have 1 less item, good!"""
+        self.assertEqual(stack.__repr__(), "Stack(4, Node(3, Node(2, Node(1, None))))")
+        """Testing empty stack"""
+        stack2 = Stack(4)
+        with self.assertRaises(IndexError):
+            stack2.pop()
+
+    def test_peek(self):
+        """Create full stack"""
+        nodes = Node(4, Node(3, Node (2, Node(1))))
+        stack = Stack(4, nodes)
+        self.assertEqual(stack.__repr__(), "Stack(4, Node(4, Node(3, Node(2, Node(1, None)))))")
+        """Peek returns Node but next pointer is not affected"""
+        self.assertEqual(stack.peek(), Node(4, Node(3, Node (2, Node(1)))))
+        """Testing empty stack"""
+        stack2 = Stack(4)
+        with self.assertRaises(IndexError):
+            stack2.peek()
+
+    def test_size(self):
+        """Create full stack"""
+        four_patties = Node(4, Node(3, Node (2, Node(1))))
+        quadruple_big_mac = Stack(4, four_patties)
+        self.assertEqual(quadruple_big_mac.__repr__(), "Stack(4, Node(4, Node(3, Node(2, Node(1, None)))))")
+        """Testing non-empty stack"""
+        self.assertEqual(quadruple_big_mac.size(), 4)
+        dumpster_Fire = quadruple_big_mac.pop()
+        self.assertEqual(quadruple_big_mac.size(), 3)
+
+        """Testing empty stack"""
+        donut_hole = Stack(4)
+        self.assertEqual(donut_hole.size(), 0)
 
 if __name__ == '__main__': 
     unittest.main()
