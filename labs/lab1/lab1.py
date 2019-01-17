@@ -29,17 +29,20 @@ def bin_search(target, low, high, int_list):  # must use recursion
    if int_list is None : # base case
        raise ValueError
 
-   mid = (low + high) // 2
-
+   mid = (low + high) // 2   
    if int_list[mid] == target : return mid # base case
-   if int_list[low] == target : return low # base case
-   if int_list[high] == target : return high # base case
 
    if low == high - 1: return None # base case
 
    # checks upper half of list
-   result = bin_search(target, mid, high, int_list)
-   if result is not None : return result
-   # checks lower half of list        
-   result = bin_search(target, low, mid, int_list)
-   if result is not None : return result
+   if target > mid:
+       if int_list[high] == target : return high # base case
+       result = bin_search(target, mid, high, int_list)
+       if result is None: raise ValueError 
+       return result
+   # checks lower half of list
+   elif target < mid:
+       if int_list[low] == target : return low # base case
+       result = bin_search(target, low, mid, int_list)
+       if result is None: raise ValueError 
+       return result

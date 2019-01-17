@@ -1,0 +1,24 @@
+def perm_gen_lex(my_string):
+    """
+    Recursive script that generates all permutations of the characters in a string.
+
+    For each char in the input string:
+        Form a simpler string by removing the char from the input string
+        Generate all permutations of the simpler string recursively
+        Add the removed char to the front of each permutation of the simpler string
+        Add resulting permutaion to the list
+    """
+    permutations = []
+    if my_string is '': return permutations # base case
+
+    for i in range(len(my_string)):
+        temp = list(my_string)
+        #print(temp)
+        char = temp.pop(i)
+        print(''.join(temp))
+        perms = perm_gen_lex(''.join(temp))
+        #print(perms)
+        permutations.extend(char + perm for perm in perms)
+
+    return permutations
+

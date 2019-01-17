@@ -44,8 +44,10 @@ class TestLab1(unittest.TestCase):
         list_val =[-5, -1, 3, 3.9, 4.1, 7, 100]
         low = 0
         high = len(list_val)-1
-        self.assertEqual(bin_search(4, 0, len(list_val)-1, list_val), None )
-        self.assertEqual(bin_search(-6, 0, len(list_val)-1, list_val), None )
+        with self.assertRaises(ValueError):
+            bin_search(4, 0, len(list_val)-1, list_val)
+        with self.assertRaises(ValueError):
+            bin_search(-6, 0, len(list_val)-1, list_val)
 
     def test_bin_search_4(self):
         """Tests boundary conditions"""
