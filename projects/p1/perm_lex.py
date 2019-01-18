@@ -12,7 +12,7 @@ def perm_gen_lex(my_string=None):
         Add the removed char to the front of each permutation of the simpler string
         Add resulting permutaion to the list
     """
-    permutations = [] # cant get this to work
+    permutations = []
 
     """ Base Cases """
     if my_string is None: raise ValueError
@@ -30,6 +30,7 @@ def perm_gen_lex(my_string=None):
         """ Extend list of permutations using List Comprehension syntax"""
         permutations.extend([char + perm for perm in temp_permutations])
 
-    print("permutations",permutations)
+    #print("permutations",permutations)
+    """ Base Case """
     return permutations
 
