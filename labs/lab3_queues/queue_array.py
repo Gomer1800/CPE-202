@@ -1,3 +1,5 @@
+# Luis Gomez
+# CPE 202
 # Queue ADT - circular array implementation
 
 class Queue:
@@ -40,15 +42,29 @@ class Queue:
 
     def is_empty(self):
         """Returns true if the queue is empty and false otherwise"""
+        return self.num_items == 0
 
     def is_full(self):
         """Returns true if the queue is full and false otherwise"""
+        return self.num_items == self.capacity
 
     def enqueue(self, item):
         """enqueues item"""
+        if self.num_items == self.capacity: raise IndexError
+        if self.rear == self.capacity: self.rear = 0
+        self.items[self.rear] = item
+        self.rear += 1 
+        self.num_items += 1
 
     def dequeue(self):
         """dequeues item"""
+        if self.num_items == 0: raise IndexError
+        temp = self.items[self.front]
+        if self.front ==  self.capacity: self.front = 0
+        self.front +=1
+        self.num_items -= 1
+        return temp
 
     def size(self):
        """Returns the number of items in the queue"""
+       return self.num_items
