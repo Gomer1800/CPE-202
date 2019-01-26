@@ -1,3 +1,5 @@
+# Luis Gomez
+# CPE 202
 # Linked list version of ADT Queue
 
 # Node class for use with Queue implemented with linked list
@@ -31,13 +33,15 @@ class Queue:
             node = node.next
             if self.num_items > capacity:
                 raise IndexError
-
+    
     def __eq__(self, other):
+        print(type(self))
+        print(type(other))
         return ((type(other) == Queue)
           and self.capacity == other.capacity
           and self.front == other.front
         )
-
+    
     def __repr__(self):
         return ("Queue({!r}, {!r})".format(self.capacity, self.front))
 
@@ -45,15 +49,35 @@ class Queue:
 
     def is_empty(self):
         """Returns true if the queue is empty and false otherwise"""
+        return self.num_items == 0
 
     def is_full(self):
         """Returns true if the queue is full and false otherwise"""
+        return self.num_items == self.capacity
 
     def enqueue(self, item):
         """enqueues item"""
+        if self.is_full(): raise IndexError
+        temp = Node(item)
+        if self.num_items != 0:
+            self.rear.next = temp
+        else: self.front = temp
+        self.rear = temp
+        self.num_items += 1
 
     def dequeue(self):
         """dequeues item"""
+        if self.num_items > 0:
+            self.num_items -= 1
+            temp = self.front
+            if self.num_items == 0:
+                self.rear = None
+                self.front = None
+            else: self.front  = temp.next
+            temp.next = None
+        else: raise IndexError
+        return temp.data
 
     def size(self):
         """Returns the number of items in the queue"""
+        return self.num_items
