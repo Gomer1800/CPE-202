@@ -1,5 +1,6 @@
 """
 Author: Luis Gomez
+CPE 202
 """
 class Node:
     """Node for use with doubly-linked list"""
@@ -158,7 +159,7 @@ class OrderedList:
         
         new_list = int_list
         new_list = [ int_list.pop(-1) ] # pops last element to the front
-        new_list.extend( reverse_rec(int_list) )
+        new_list.extend( self.reverse_rec(int_list) )
         return new_list
     
     def node_list(self): # HELPER FUNCTION
