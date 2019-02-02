@@ -1,3 +1,6 @@
+"""
+Luis Gomez
+"""
 # Start of unittest - add to completely test functions in exp_eval
 
 import unittest
@@ -27,13 +30,21 @@ class test_expressions(unittest.TestCase):
             self.fail()
         except PostfixFormatException as e:
             self.assertEqual(str(e), "Too many operands")
-
+    
     def test_infix_to_postfix_01(self):
         self.assertEqual(infix_to_postfix("6 - 3"), "6 3 -")
         self.assertEqual(infix_to_postfix("6"), "6")
-        
+
+    def test_infix_to_postfix_02(self):
+        self.assertEqual(infix_to_postfix("( 6 - 3 ) ** 2"), "6 3 - 2 **")
+        self.assertEqual(infix_to_postfix("6 / ( 2 - 0 )"), "6 2 0 - /")
+
     def test_prefix_to_postfix(self):
         self.assertEqual(prefix_to_postfix("* - 3 / 2 1 - / 4 5 6"), "3 2 1 / - 4 5 / 6 - *")
+    
+    def test_prefix_to_postfix_02(self):
+        self.assertEqual(prefix_to_postfix("+ + + 1 2 3 4"), "1 2 + 3 + 4 +")
+        self.assertEqual(prefix_to_postfix("+ * 1 2 * 3 4"), "1 2 * 3 4 * +")
 
 if __name__ == "__main__":
     unittest.main()
