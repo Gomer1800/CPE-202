@@ -57,7 +57,7 @@ def infix_to_postfix(input_str): # postfix requires that all operators proceed a
     if input_str is None: raise ValueError
     # Split input string
     term_list = input_str.split()
-    print("TERM LIST ",term_list) 
+    #print("TERM LIST ",term_list) 
     # Create output list, will be fed to postfix_eval() at end
     output_list = []
     # initialize stack large enough to contain all operators
@@ -82,13 +82,13 @@ def infix_to_postfix(input_str): # postfix requires that all operators proceed a
             # Otherwise push to stack but pop any higher/equal order operators
             else:
                 sort_operators(term, operator_stack, output_list)
-                print(operator_stack.peek())
+                #print(operator_stack.peek())
         #else: raise PostfixFormatException("Invalid token")
     #if len(term_list) % 3 != 0: raise PostfixFormatException("Too many operands")
     while operator_stack.size() != 0:
         output_list.append(operator_stack.pop())
     new_str = (" ".join(output_list))
-    print("NEW STR ", new_str)
+    #print("NEW STR ", new_str)
     return new_str
 
 def prefix_to_postfix(input_str): # prefix requires that all operators precede the two operands that they work on
@@ -149,7 +149,7 @@ def operand_present(input_str): # HELPER
 def sort_operators(current_operator, operator_stack, output_list): # HELPER
     """Sorts an incoming operator stack according to current_operator, 
     and pops higher precedence operators to an output list"""
-    print("SORT ", current_operator)
+    #print("SORT ", current_operator)
     # order of operations represented as a list
     order = ['*','<<','**','/','>>','+','-']
     i = order.index(current_operator)
