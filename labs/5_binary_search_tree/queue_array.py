@@ -59,9 +59,9 @@ class Queue:
     def dequeue(self):
         """dequeues item"""
         if self.num_items == 0: raise IndexError
-        if self.front ==  self.capacity: self.front = 0
         temp = self.items[self.front]
         self.front +=1
+        if self.front ==  self.capacity: self.front = 0
         self.num_items -= 1
         return temp
 
