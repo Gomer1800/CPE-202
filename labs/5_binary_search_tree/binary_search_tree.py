@@ -40,13 +40,13 @@ class BinarySearchTree:
         # is key < parent
         elif key < parent.key:
             # base case, is left empty?
-            if parent.left is None: return False
+            if parent.left == None: return False
             # recursive left
             return self.search_helper(key, parent.left)
         # is key > parent
         elif key > parent.key:
             # base case, is right empty?
-            if parent.right is None: return False
+            if parent.right == None: return False
             # recursive right
             return self.search_helper(key, parent.right)
         else: raise Exception("search_helper error")
@@ -55,8 +55,8 @@ class BinarySearchTree:
         # If an item with the given key is already in the BST, 
         # the data in the tree will be replaced with the new data
         # Example creation of node: temp = TreeNode(key, data)
-        if data is None: raise ValueError("Cant insert. data = None")
-        elif self.root is None: self.root = TreeNode(key, data)
+        if data == None: raise ValueError("Cant insert. data = None")
+        elif self.is_empty(): self.root = TreeNode(key, data)
         else: self.insert_helper(key, data, self.root)
 
     def insert_helper(self, key, data, parent):
@@ -72,7 +72,7 @@ class BinarySearchTree:
         # is key < parent
         elif key < parent.key:
             # base case, left is empty
-            if parent.left is None:
+            if parent.left == None:
                 # create new node(key, data) = left
                 parent.left = TreeNode(key, data)
             # recursive left
@@ -80,7 +80,7 @@ class BinarySearchTree:
         # is key > parent
         elif key > parent.key:
             # base case, right is empty
-            if parent.right is None:
+            if parent.right == None:
                 # create new node(key, data) = right
                 parent.right =  TreeNode(key, data)
             # recursive right
@@ -94,7 +94,7 @@ class BinarySearchTree:
 
     def find_min_helper(self, parent):
         # does left node exist?
-        if parent.left is not None:
+        if parent.left != None:
             # recursive left
             return self.find_min_helper(parent.left)
         # base case, leftmost leaf reached
@@ -107,9 +107,9 @@ class BinarySearchTree:
 
     def find_max_helper(self, parent):
         # does right node exist?
-        if parent.right is not None:
+        if parent.right != None:
             # recursive right 
-            return self.find_min_helper(parent.right)
+            return self.find_max_helper(parent.right)
         # base case, rightmost leaf reached
         return (parent.key, parent.data)
 
@@ -124,56 +124,59 @@ class BinarySearchTree:
         Explores left and right branches of existing nodes
         returns largest running count after branches/leaves are exhausted
         """
+        height = count
         # left node exist?
-        if parent.left is not None:
+        if parent.left != None:
             # increment count
             # recursive left
-            left_count = self.tree_height_helper(count+1, parent.left)
-            if left_count > count: count = left_count
+            left_count = self.tree_height_helper(parent.left, count+1)
+            if left_count > count: height = left_count
         # right node exist?
-        if parent.right is not None:
+        if parent.right != None:
             # increment count
             # recursive right
-            right_count = self.tree_height_helper(count+1, parent.right)
-            if right_count > count: count = right_count
+            right_count = self.tree_height_helper(parent.right, count+1)
+            if right_count > count: height = right_count
         # base case, parent is leaf
-        else: return count
+        return height
 
     def inorder_list(self): # (smallest to largest key)
         # return Python list of BST keys representing in-order traversal of BST (
         if self.is_empty(): raise IndexError("Inorder not possible, empty tree")
-        return self.inorder_list_helper(self.root)
+        key_list = []
+        return self.inorder_list_helper(self.root, key_list)
 
-    def inorder_list_helper(self, parent, key_list=[]):
+    def inorder_list_helper(self, parent, key_list):
         # is left empty?
-        if parent.left is not None:
+        if parent.left != None:
             # False, recursive call left
-            key_list.extend(self.inorder_list_helper(parent.left))
+            key_list = self.inorder_list_helper(parent.left, key_list)
         # add self key to list
         key_list.append(parent.key)
         # is right empty?
-        if parent.right is not None:
+        if parent.right != None:
             # False, recursive call right
-            key_list.extend(self.inorder_list_helper(parent.right))
+            key_list = self.inorder_list_helper(parent.right, key_list)
         # base case, return list
         return key_list
 
     def preorder_list(self): # Explores in following order (CURRENT, LEFT, RIGHT)
         # return Python list of BST keys representing pre-order traversal of BST
         if self.is_empty(): raise IndexError("Preorder not possible, empty tree")
-        return self.preorder_list_helper(self.root)
+        key_list = []
+        return self.preorder_list_helper(self.root, key_list)
 
-    def preorder_list_helper(self, parent, key_list=[]):
+    def preorder_list_helper(self, parent, key_list):
         # add self key to list
         key_list.append(parent.key)
         # is left empty?
-        if parent.left is not None:
+        if parent.left != None:
             # False, recursive left
-            key_list.extend(self.preorder_list_helper(parent.left))
+            key_list = self.preorder_list_helper(parent.left, key_list)
         # is right empty?
-        if parent.right is not None:
+        if parent.right != None:
             # False, recursive right
-            key_list.extend(self.preorder_list_helper(parent.right))
+            key_list = self.preorder_list_helper(parent.right, key_list)
         # base case, return list
         return key_list
 
@@ -197,11 +200,11 @@ class BinarySearchTree:
             q.enqueue(parent.key)
             return q
         # is left empty?
-        if parent.left is not None:
+        if parent.left != None:
             # False, recursive left
             q = self.level_order_list_helper(q, parent.left, tree_height, count)
         # is right empty?
-        if parent.right is not None:
+        if parent.right != None:
             # False, recursive right
             q = self.level_order_list_helper(q, parent.right, tree_height, count)
         # base case, all branches exhausted
