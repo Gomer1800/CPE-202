@@ -1,3 +1,7 @@
+"""
+Author: Luis Gomez
+CPE 202
+"""
 import unittest
 from binary_search_tree import *
 

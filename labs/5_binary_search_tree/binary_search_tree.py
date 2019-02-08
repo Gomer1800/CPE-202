@@ -1,3 +1,7 @@
+"""
+Author: Luis Gomez
+CPE 202
+"""
 from queue_array import Queue
 
 class TreeNode:
