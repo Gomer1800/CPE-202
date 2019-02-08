@@ -56,6 +56,7 @@ class BinarySearchTree:
         # the data in the tree will be replaced with the new data
         # Example creation of node: temp = TreeNode(key, data)
         if data is None: raise ValueError("Cant insert. data = None")
+        elif self.root is None: self.root = TreeNode(key, data)
         else: self.insert_helper(key, data, self.root)
 
     def insert_helper(self, key, data, parent):
@@ -115,7 +116,7 @@ class BinarySearchTree:
     def tree_height(self): # return the height of the tree
         # returns None if tree is empty
         if self.is_empty(): return None
-        else: return self.tree_height(self.root)
+        else: return self.tree_height_helper(self.root)
 
     def tree_height_helper(self, parent, count=0):
         """
@@ -140,14 +141,68 @@ class BinarySearchTree:
 
     def inorder_list(self): # (smallest to largest key)
         # return Python list of BST keys representing in-order traversal of BST (
-        pass
+        if self.is_empty(): raise IndexError("Inorder not possible, empty tree")
+        return self.inorder_list_helper(self.root)
+
+    def inorder_list_helper(self, parent, key_list=[]):
+        # is left empty?
+        if parent.left is not None:
+            # False, recursive call left
+            key_list.extend(self.inorder_list_helper(parent.left))
+        # add self key to list
+        key_list.append(parent.key)
+        # is right empty?
+        if parent.right is not None:
+            # False, recursive call right
+            key_list.extend(self.inorder_list_helper(parent.right))
+        # base case, return list
+        return key_list
 
     def preorder_list(self): # Explores in following order (CURRENT, LEFT, RIGHT)
         # return Python list of BST keys representing pre-order traversal of BST
-        pass
-        
+        if self.is_empty(): raise IndexError("Preorder not possible, empty tree")
+        return self.preorder_list_helper(self.root)
+
+    def preorder_list_helper(self, parent, key_list=[]):
+        # add self key to list
+        key_list.append(parent.key)
+        # is left empty?
+        if parent.left is not None:
+            # False, recursive left
+            key_list.extend(self.preorder_list_helper(parent.left))
+        # is right empty?
+        if parent.right is not None:
+            # False, recursive right
+            key_list.extend(self.preorder_list_helper(parent.right))
+        # base case, return list
+        return key_list
+
     def level_order_list(self):  # (breadth first search)
         # return Python list of BST keys representing level-order traversal of BST
         # You MUST use your queue_array data structure from lab 3 to implement this method
+        if self.is_empty(): raise IndexError("levelorder not possible, empty tree")
+        key_list = []
         q = Queue(25000) # Don't change this!
-        pass
+        HEIGHT = self.tree_height_helper(self.root)
+        for desired_level in range(HEIGHT+1):
+            q = self.level_order_list_helper(q, self.root, HEIGHT, desired_level)
+        while q.size() != 0:
+            key_list.append(q.dequeue())
+        return key_list
+
+    def level_order_list_helper(self, q, parent, tree_height, count):
+        # is tree height - parent height = count ?
+        if tree_height -  self.tree_height_helper(parent) == count:
+            # True, base case, reached desired level
+            q.enqueue(parent.key)
+            return q
+        # is left empty?
+        if parent.left is not None:
+            # False, recursive left
+            q = self.level_order_list_helper(q, parent.left, tree_height, count)
+        # is right empty?
+        if parent.right is not None:
+            # False, recursive right
+            q = self.level_order_list_helper(q, parent.right, tree_height, count)
+        # base case, all branches exhausted
+        return q
