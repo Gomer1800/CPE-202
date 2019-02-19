@@ -18,26 +18,32 @@ class HuffmanNode:
         return ("HuffmanNode({!r}, {!r}, {!r}, {!r})".format(self.char, self.freq, self.left, self.right))
 
 def comes_before(a, b):
-    """Returns True if node a comes before node b, False otherwise"""
+    """
+    Returns True if node a comes before node b, False otherwise
+    """
     if a.freq == b.freq:
         return a.char < b.char
     else:
         return a.freq < b.freq
 
 def combine(a, b):
-    """Creates and returns a new Huffman node with children a and b, with the "lesser node" on the left
+    """
+    Creates and returns a new Huffman node with children a and b, with the "lesser node" on the left
     The new node's frequency value will be the sum of the a and b frequencies
-    The new node's char value will be the lesser of the a and b char ASCII values"""
+    The new node's char value will be the lesser of the a and b char ASCII values
+    """
     char_rep = min([a.char, b.char])
     new_root = HuffmanNode(char_rep, a.freq + b.freq)
     new_root.left, new_root.right = a, b
     return new_root
 
 def cnt_freq(filename):
-    """Opens a text file with a given file name (passed as a string) and counts the 
+    """
+    Opens a text file with a given file name (passed as a string) and counts the 
     frequency of occurrences of all the characters within that file
     Returns a Python List with 256 entries - counts are initialized to zero.
-    The ASCII value of the characters are used to index into this list for the frequency counts"""
+    The ASCII value of the characters are used to index into this list for the frequency counts
+    """
     # initialize list of size 256 with counts initialized to 0
     freq_list = [0]*256
     # read file line by line
@@ -66,7 +72,7 @@ def create_huff_tree(freq_list):
     # if all counts are zero, return None
     if max(freq_list) == 0: return None
     # create list of (index, freq) tuples, filtering out zero-occuring chars
-    valid_chars = [(index, freq) for index ,freq in enumerate(freq_list) if freq > 0]
+    valid_chars = [(index, freq) for index, freq in enumerate(freq_list) if freq > 0]
     #print (valid_chars)
     # sort tuple list by freq, and index value if tied
     valid_chars.sort(key=lambda tup: tup[1])
@@ -149,12 +155,48 @@ def create_code_helper(node, code_array, char_code):
     # all leaves exhausted
     return code_array
 
-#def create_header(freq_list):
-    """Input is the list of frequencies (provided by cnt_freq()).
+def create_header(freq_list):
+    """
+    Input is the list of frequencies (provided by cnt_freq()).
     Creates and returns a header for the output file
-    Example: For the frequency list asscoaied with "aaabbbbcc, would return “97 3 98 4 99 2” """
+    Example: For the frequency list asscoaied with "aaabbbbcc, would return “97 3 98 4 99 2”
+    """
+    # if all counts are zero, return None
+    if max(freq_list) == 0: return None
+    # create list of (index, freq) tuples, filtering out zero-occuring chars
+    valid_chars = [(index, freq) for index, freq in enumerate(freq_list) if freq > 0]
+    header_str = ""
+    for (index, freq) in valid_chars:
+        header_str+= str(index) + " " + str(freq) + " "
+    return header_str[0:-1]
 
-#def huffman_encode(in_file, out_file):
-    """Takes inout file name and output file name as parameters
+def huffman_encode(in_file, out_file):
+    """
+    Takes inout file name and output file name as parameters
     Uses the Huffman coding process on the text from the input file and writes encoded text to output file
-    Take not of special cases - empty file and file with only one unique character"""
+    Take not of special cases - empty file and file with only one unique character
+    """
+    try:
+        char_list = []
+        with open(in_file) as file_object:
+            line_list = file_object.readline()
+            for line in line_list:
+                char_list.extend(list(line))
+    except FileNotFoundError:
+        print("Can't generate char_list")
+    try:
+        freq_list = cnt_freq( in_file)
+    except FileNotFoundError:
+        print("Can't generate freq_list")
+
+    root_node = create_huff_tree( freq_list)
+    code_array = create_code( root_node)
+    huff_code = ""
+    for char in char_list:
+        huff_code += code_array[ord(char)]
+    try:
+        with open(out_file, 'w') as file_object:
+            file_object.write( create_header(freq_list) + '\n')
+            file_object.write( huff_code)
+    except Exception:
+        print("Cannot write to File") 

@@ -24,9 +24,9 @@ class TestList(unittest.TestCase):
         self.assertEqual(right.freq, 16)
         self.assertEqual(right.char, 100)
 
-    # def test_create_header(self):
-    #    freqlist = cnt_freq("file2.txt")
-    #    self.assertEqual(create_header(freqlist), "97 2 98 4 99 8 100 16 102 2")
+    def test_create_header(self):
+        freqlist = cnt_freq("file2.txt")
+        self.assertEqual(create_header(freqlist), "97 2 98 4 99 8 100 16 102 2")
 
     def test_create_code(self):
         freqlist = cnt_freq("file2.txt")
@@ -36,14 +36,23 @@ class TestList(unittest.TestCase):
         self.assertEqual(codes[ord('a')], '0000')
         self.assertEqual(codes[ord('f')], '0001')
 
-    # def test_01_textfile(self):
-    #    huffman_encode("file1.txt", "file1_out.txt")
+    def test_01_textfile(self):
+        huffman_encode("file1.txt", "file1_out.txt")
         # capture errors by comparing your encoded file with a *known* solution file
-    #    if usediff:
-    #        err = subprocess.call("diff -wb file1_out.txt file1_soln.txt", shell = True)
-    #        self.assertEqual(err, 0)
-    #    else:
-    #        self.assertTrue(filecmp.cmp("file1_out.txt", "file1_soln.txt"))
+        if usediff:
+            err = subprocess.call("diff -wb file1_out.txt file1_soln.txt", shell = True)
+            self.assertEqual(err, 0)
+        else:
+            self.assertTrue(filecmp.cmp("file1_out.txt", "file1_soln.txt"))
+
+    def test_02_textfile(self):
+        huffman_encode("file2.txt", "file2_out.txt")
+        # capture errors by comparing your encoded file with a *known* solution file
+        if usediff:
+            err = subprocess.call("diff -wb file2_out.txt file2_soln.txt", shell = True)
+            self.assertEqual(err, 0)
+        else:
+            self.assertTrue(filecmp.cmp("file2_out.txt", "file2_soln.txt"))
 
 if __name__ == '__main__': 
    unittest.main()
