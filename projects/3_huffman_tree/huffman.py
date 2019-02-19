@@ -24,10 +24,14 @@ def comes_before(a, b):
     else:
         return a.freq < b.freq
 
-#def combine(a, b):
+def combine(a, b):
     """Creates and returns a new Huffman node with children a and b, with the "lesser node" on the left
     The new node's frequency value will be the sum of the a and b frequencies
     The new node's char value will be the lesser of the a and b char ASCII values"""
+    char_rep = min([a.char, b.char])
+    new_root = HuffmanNode(char_rep, a.freq + b.freq)
+    new_root.left, new_root.right = a, b
+    return new_root
 
 def cnt_freq(filename):
     """Opens a text file with a given file name (passed as a string) and counts the 
@@ -74,7 +78,8 @@ def create_huff_tree(freq_list):
     return create_huff_tree_helper(tree_list)[0]
 
 def create_huff_tree_helper(tree_list):
-    """ Recursive method for building a huffman tree
+    """ 
+    Recursive function for building a huffman tree
     param tree_list: list of HuffmanNodes from which to build tree
     base cases:
     - node list is empty: return None
@@ -94,9 +99,8 @@ def create_huff_tree_helper(tree_list):
         # print("else",tree_list)
         left = tree_list.pop(0)
         right = tree_list.pop(0)
-        char_rep = min([left.char,right.char])
-        new_root = HuffmanNode(char_rep, left.freq + right.freq)
-        new_root.left, new_root.right = left, right
+        # create new HuffmanNode
+        new_root = combine(left, right)
         for i in range(len(tree_list)):
             # print("i = ",i)
             if comes_before(new_root, tree_list[i]):
@@ -113,10 +117,37 @@ def create_huff_tree_helper(tree_list):
         # print("return")
         return create_huff_tree_helper(tree_list)
 
-#def create_code(node):
-    """Returns an array (Python list) of Huffman codes. For each character, use the integer ASCII representation 
+def create_code(node):
+    """
+    Returns an array (Python list) of Huffman codes. For each character, use the integer ASCII representation 
     as the index into the array, with the resulting Huffman code for that character stored at that location.
     Characters that are unused should have an empty string at that location"""
+    if node is None: return None # ASK PROF about exception here?
+    code_array = [""]*256
+    return create_code_helper(node, code_array, "")
+
+def create_code_helper(node, code_array, char_code):
+    """
+    Recursive function that generates an array of huffcodes for 256 characters
+    param node: Huffman root node from which to traverse
+    param code_array: array of 256 Huffman codes whose indeces are the ASCII codes for chars
+    param char_code: string representation for current character
+    base cases:
+        * if leaf node reached, populate code_array using current char as index and char_code
+        * recursive left, right hand concatenation of 1 or 0 to char_code
+        * recursive right, same as above
+        * all leaves exhausted, return code_array
+    """
+    # leaf node reached
+    if node.left is None and node.right is None:
+        code_array[node.char] = char_code
+        return code_array
+    # traverse left
+    code_array = create_code_helper( node.left, code_array, char_code+'0')
+    # traverse right
+    code_array = create_code_helper( node.right, code_array, char_code+'1')
+    # all leaves exhausted
+    return code_array
 
 #def create_header(freq_list):
     """Input is the list of frequencies (provided by cnt_freq()).

@@ -28,13 +28,13 @@ class TestList(unittest.TestCase):
     #    freqlist = cnt_freq("file2.txt")
     #    self.assertEqual(create_header(freqlist), "97 2 98 4 99 8 100 16 102 2")
 
-    # def test_create_code(self):
-    #    freqlist = cnt_freq("file2.txt")
-    #    hufftree = create_huff_tree(freqlist)
-    #    codes = create_code(hufftree)
-    #    self.assertEqual(codes[ord('d')], '1')
-    #    self.assertEqual(codes[ord('a')], '0000')
-    #    self.assertEqual(codes[ord('f')], '0001')
+    def test_create_code(self):
+        freqlist = cnt_freq("file2.txt")
+        hufftree = create_huff_tree(freqlist)
+        codes = create_code(hufftree)
+        self.assertEqual(codes[ord('d')], '1')
+        self.assertEqual(codes[ord('a')], '0000')
+        self.assertEqual(codes[ord('f')], '0001')
 
     # def test_01_textfile(self):
     #    huffman_encode("file1.txt", "file1_out.txt")
