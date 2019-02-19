@@ -14,15 +14,15 @@ class TestList(unittest.TestCase):
     def test_create_huff_tree(self):
         freqlist = cnt_freq("file2.txt")
         create_huff_tree(freqlist)
-    #    hufftree = create_huff_tree(freqlist)
-    #    self.assertEqual(hufftree.freq, 32)
-    #    self.assertEqual(hufftree.char, 97)
-    #    left = hufftree.left
-    #    self.assertEqual(left.freq, 16)
-    #    self.assertEqual(left.char, 97)
-    #    right = hufftree.right
-    #    self.assertEqual(right.freq, 16)
-    #    self.assertEqual(right.char, 100)
+        hufftree = create_huff_tree(freqlist)
+        self.assertEqual(hufftree.freq, 32)
+        self.assertEqual(hufftree.char, 97)
+        left = hufftree.left
+        self.assertEqual(left.freq, 16)
+        self.assertEqual(left.char, 97)
+        right = hufftree.right
+        self.assertEqual(right.freq, 16)
+        self.assertEqual(right.char, 100)
 
     # def test_create_header(self):
     #    freqlist = cnt_freq("file2.txt")

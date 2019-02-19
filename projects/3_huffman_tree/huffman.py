@@ -20,7 +20,7 @@ class HuffmanNode:
 def comes_before(a, b):
     """Returns True if node a comes before node b, False otherwise"""
     if a.freq == b.freq:
-        return ord(a) < ord(b)
+        return a.char < b.char
     else:
         return a.freq < b.freq
 
@@ -63,14 +63,15 @@ def create_huff_tree(freq_list):
     if max(freq_list) == 0: return None
     # create list of (index, freq) tuples, filtering out zero-occuring chars
     valid_chars = [(index, freq) for index ,freq in enumerate(freq_list) if freq > 0]
-    print (valid_chars)
+    #print (valid_chars)
     # sort tuple list by freq, and index value if tied
     valid_chars.sort(key=lambda tup: tup[1])
-    print (valid_chars)
+    #print (valid_chars)
     # create sorted list of huffman nodes
-    tree_list = [HuffmanNode(chr(index), freq) for (index, freq) in valid_chars]
-    print(tree_list)
-    # create huffman tree
+    tree_list = [HuffmanNode(index, freq) for (index, freq) in valid_chars]
+    #print(tree_list)
+    # create huffman tree, return root node
+    return create_huff_tree_helper(tree_list)[0]
 
 def create_huff_tree_helper(tree_list):
     """ Recursive method for building a huffman tree
@@ -80,11 +81,37 @@ def create_huff_tree_helper(tree_list):
     - single node in list: node is root node, tree is complete
     - more than one node:
         * remove two nodes from beginning of list
-        * create new none with these two as children, left is lesser
+        * create new none with these two as children, left is lesser freq, 
+          freq equal to sum, char being the lesser in ASCII value of the two
         * insert new node to sorted list
         * recursive call
     """
-    pass
+    if len(tree_list) == 0: return None
+    elif len(tree_list) == 1:
+        # print("elif ",tree_list)
+        return tree_list
+    else:
+        # print("else",tree_list)
+        left = tree_list.pop(0)
+        right = tree_list.pop(0)
+        char_rep = min([left.char,right.char])
+        new_root = HuffmanNode(char_rep, left.freq + right.freq)
+        new_root.left, new_root.right = left, right
+        for i in range(len(tree_list)):
+            # print("i = ",i)
+            if comes_before(new_root, tree_list[i]):
+                tree_list.insert(i, new_root)
+                # print("Break")
+                break
+            elif i == len(tree_list)-1:
+                tree_list.append(new_root)
+        if len(tree_list) == 0:
+            tree_list.append(new_root)
+        """ Debug print statements"""
+        # print("length ", len(tree_list))
+        # print("else ",tree_list)
+        # print("return")
+        return create_huff_tree_helper(tree_list)
 
 #def create_code(node):
     """Returns an array (Python list) of Huffman codes. For each character, use the integer ASCII representation 
