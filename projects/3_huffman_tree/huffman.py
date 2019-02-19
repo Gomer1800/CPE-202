@@ -69,10 +69,10 @@ def create_huff_tree(freq_list):
     Create a Huffman tree for characters with non-zero frequency
     Returns the root node of the Huffman tree. Returns None if all counts are zero.
     """
+    # if all counts are zero, return None
+    if max(freq_list) == 0: return None
     # create list of (index, freq) tuples, filtering out zero-occuring chars
     valid_chars = [(index, freq) for index, freq in enumerate(freq_list) if freq > 0]
-    # if all counts are zero, return None
-    if len(valid_chars) == 0: return None
     # sort tuple list by freq, and index value if tied
     valid_chars.sort(key=lambda tup: tup[1])
     #print (valid_chars)
@@ -178,20 +178,25 @@ def huffman_encode(in_file, out_file):
     try:
         char_list = []
         huff_code = ""
+        # generate character list
         with open(in_file) as file_object:
             line_list = file_object.readlines()
             for line in line_list:
                 char_list.extend(list(line))
+        # generate frequency list
         freq_list = cnt_freq( in_file)
-        if freq_list != None:
-            root_node = create_huff_tree( freq_list)
+        # generate huff tree, returns None if in file was empty
+        root_node = create_huff_tree( freq_list)
+        if root_node != None:
+            # generate out file
             code_array = create_code( root_node)
             for char in char_list:
                 huff_code += code_array[ord(char)]
-                with open(out_file, 'w') as file_object:
-                    file_object.write( create_header(freq_list) + '\n')
-                    file_object.write( huff_code)
+            with open(out_file, 'w') as file_object:
+                file_object.write( create_header(freq_list) + '\n')
+                file_object.write( huff_code)
         else:
+            # generate empty out file
             file_object = open(out_file, 'w')
             file_object.close()
     except FileNotFoundError:
