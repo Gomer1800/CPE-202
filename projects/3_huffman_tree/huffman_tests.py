@@ -54,5 +54,32 @@ class TestList(unittest.TestCase):
         else:
             self.assertTrue(filecmp.cmp("file2_out.txt", "file2_soln.txt"))
 
+    def test_03_textfile(self):
+        huffman_encode("file3.txt", "file3_out.txt")
+        # capture errors by comparing your encoded file with a *known* solution file
+        if usediff:
+            err = subprocess.call("diff -wb file3_out.txt file3_soln.txt", shell = True)
+            self.assertEqual(err, 0)
+        else:
+            self.assertTrue(filecmp.cmp("file3_out.txt", "file3_soln.txt"))
+
+    def test_04_textfile(self):
+        huffman_encode("multiline.txt", "multiline_out.txt")
+        # capture errors by comparing your encoded file with a *known* solution file
+        if usediff:
+            err = subprocess.call("diff -wb multiline_out.txt multiline_soln.txt", shell = True)
+            self.assertEqual(err, 0)
+        else:
+            self.assertTrue(filecmp.cmp("multiline_out.txt", "multiline_soln.txt"))
+
+    def test_05_textfile(self):
+        huffman_encode("declaration.txt", "declaration_out.txt")
+        # capture errors by comparing your encoded file with a *known* solution file
+        if usediff:
+            err = subprocess.call("diff -wb declaration_out.txt declaration_soln.txt", shell = True)
+            self.assertEqual(err, 0)
+        else:
+            self.assertTrue(filecmp.cmp("declaration_out.txt", "declaration_soln.txt"))
+
 if __name__ == '__main__': 
    unittest.main()

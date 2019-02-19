@@ -50,17 +50,13 @@ def cnt_freq(filename):
     # split line into chars and increment respective element in freq list
     try:
         with open(filename) as file_object: # with ... will close the file for us later
-            try:
-                line_list = file_object.readlines()
-                for line in line_list:
-                    for char in list(line):
-                        i = ord(char)
-                        freq_list[i] += 1
-            except EOFError: print("End of file hit without reading data")
-            except ValueError: print("Wrong argument -> line or char")
-    except IOError: print("Filename can't be opened")
-    except ValueError: print("Bad argument -> Filename")
-    except Exception: print("Generic Exception")
+            line_list = file_object.readlines()
+            for line in line_list:
+                for char in list(line):
+                    i = ord(char)
+                    freq_list[i] += 1
+    except FileNotFoundError: 
+        print("Filename can't be opened")
     finally: return freq_list
 
 def create_huff_tree(freq_list):
@@ -179,9 +175,10 @@ def huffman_encode(in_file, out_file):
     try:
         char_list = []
         with open(in_file) as file_object:
-            line_list = file_object.readline()
+            line_list = file_object.readlines()
             for line in line_list:
                 char_list.extend(list(line))
+        #print("char_list ",char_list)
     except FileNotFoundError:
         print("Can't generate char_list")
     try:
