@@ -1,3 +1,7 @@
+"""
+Luis Gomez
+Data Structures
+"""
 class HuffmanNode:
     def __init__(self, char, freq):
         self.char = char   # stored as an integer - the ASCII character code value
@@ -56,7 +60,7 @@ def cnt_freq(filename):
                     i = ord(char)
                     freq_list[i] += 1
     except FileNotFoundError: 
-        print("Filename can't be opened")
+        raise FileNotFoundError("Filename can't be opened")
     finally: return freq_list
 
 def create_huff_tree(freq_list):
@@ -65,11 +69,10 @@ def create_huff_tree(freq_list):
     Create a Huffman tree for characters with non-zero frequency
     Returns the root node of the Huffman tree. Returns None if all counts are zero.
     """
-    # if all counts are zero, return None
-    if max(freq_list) == 0: return None
     # create list of (index, freq) tuples, filtering out zero-occuring chars
     valid_chars = [(index, freq) for index, freq in enumerate(freq_list) if freq > 0]
-    #print (valid_chars)
+    # if all counts are zero, return None
+    if len(valid_chars) == 0: return None
     # sort tuple list by freq, and index value if tied
     valid_chars.sort(key=lambda tup: tup[1])
     #print (valid_chars)
@@ -174,26 +177,24 @@ def huffman_encode(in_file, out_file):
     """
     try:
         char_list = []
+        huff_code = ""
         with open(in_file) as file_object:
             line_list = file_object.readlines()
             for line in line_list:
                 char_list.extend(list(line))
-        #print("char_list ",char_list)
-    except FileNotFoundError:
-        print("Can't generate char_list")
-    try:
         freq_list = cnt_freq( in_file)
+        if freq_list != None:
+            root_node = create_huff_tree( freq_list)
+            code_array = create_code( root_node)
+            for char in char_list:
+                huff_code += code_array[ord(char)]
+                with open(out_file, 'w') as file_object:
+                    file_object.write( create_header(freq_list) + '\n')
+                    file_object.write( huff_code)
+        else:
+            file_object = open(out_file, 'w')
+            file_object.close()
     except FileNotFoundError:
-        print("Can't generate freq_list")
-
-    root_node = create_huff_tree( freq_list)
-    code_array = create_code( root_node)
-    huff_code = ""
-    for char in char_list:
-        huff_code += code_array[ord(char)]
-    try:
+        raise FileNotFoundError("File Not Found")
         with open(out_file, 'w') as file_object:
-            file_object.write( create_header(freq_list) + '\n')
-            file_object.write( huff_code)
-    except Exception:
-        print("Cannot write to File") 
+            file_object.write("")

@@ -1,3 +1,7 @@
+"""
+Luis Gomez
+Data Structures
+"""
 import unittest
 import filecmp
 import subprocess
@@ -80,6 +84,19 @@ class TestList(unittest.TestCase):
             self.assertEqual(err, 0)
         else:
             self.assertTrue(filecmp.cmp("declaration_out.txt", "declaration_soln.txt"))
+
+    def test_06_textfile_empty(self):
+        huffman_encode("empty_thing.txt", "empty_thing__out.txt")
+        # capture errors by comparing your encoded file with a *known* solution file
+        if usediff:
+            err = subprocess.call("diff -wb empty_thing__out.txt empty_thing.txt", shell = True)
+            self.assertEqual(err, 0)
+        else:
+            self.assertTrue(filecmp.cmp("empty_thing__out.txt", "empty_thing.txt"))
+
+    def test_07_exception(self):
+        with self.assertRaises(FileNotFoundError):
+            huffman_encode("DNE.txt", "DNE_out.txt")
 
 if __name__ == '__main__': 
    unittest.main()
