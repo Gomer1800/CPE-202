@@ -33,13 +33,12 @@ def insertion_sort(list):
     copy = list[1:]
     if len(list) > 1:
         del list[1:]
-    list = list
     return insertion_sort_helper( list, copy, comps)
 
 def insertion_sort_helper( list, unsorted_list, comps):
     # print(unsorted_list)
     if unsorted_list == []:
-        return (list , comps)
+        return comps
     # print(list)
     pos = -1
     # iterate through sorted list, find position to first elem of unsorted list
@@ -58,13 +57,63 @@ def main():
     # Give the random number generator a seed, so the same sequence of 
     # random numbers is generated at each run
     random.seed(1234) 
-    
+
     # Generate 5000 random numbers from 0 to 999,999
-    randoms = random.sample(range(1000000), 5000)
+    randoms = random.sample(range(1000000), 100)
     start_time = time.time() 
     comps = selection_sort(randoms)
     stop_time = time.time()
-    print(comps, stop_time - start_time)
+    print("SS 100: ",comps, stop_time - start_time)
+    
+    # Generate 5000 random numbers from 0 to 999,999
+    randoms = random.sample(range(1000000), 100)
+    start_time = time.time() 
+    comps = insertion_sort(randoms)
+    stop_time = time.time()
+    print("IS: 100",comps, stop_time - start_time)
+
+    # Generate 5000 random numbers from 0 to 999,999
+    randoms = random.sample(range(1000000), 200)
+    start_time = time.time() 
+    comps = selection_sort(randoms)
+    stop_time = time.time()
+    print("SS 200: ",comps, stop_time - start_time)
+    
+    # Generate 5000 random numbers from 0 to 999,999
+    randoms = random.sample(range(1000000), 200)
+    start_time = time.time() 
+    comps = insertion_sort(randoms)
+    stop_time = time.time()
+    print("IS: 200",comps, stop_time - start_time)
+
+    # Generate 5000 random numbers from 0 to 999,999
+    randoms = random.sample(range(1000000), 400)
+    start_time = time.time() 
+    comps = selection_sort(randoms)
+    stop_time = time.time()
+    print("SS 400: ",comps, stop_time - start_time)
+    
+    # Generate 5000 random numbers from 0 to 999,999
+    randoms = random.sample(range(1000000), 400)
+    start_time = time.time() 
+    comps = insertion_sort(randoms)
+    stop_time = time.time()
+    print("IS: 400",comps, stop_time - start_time)
+
+    # Generate 5000 random numbers from 0 to 999,999
+    randoms = random.sample(range(1000000), 800)
+    start_time = time.time() 
+    comps = selection_sort(randoms)
+    stop_time = time.time()
+    print("SS 800: ",comps, stop_time - start_time)
+    
+    # Generate 5000 random numbers from 0 to 999,999
+    randoms = random.sample(range(1000000), 800)
+    start_time = time.time() 
+    comps = insertion_sort(randoms)
+    stop_time = time.time()
+    print("IS: 800",comps, stop_time - start_time)
+
 
 if __name__ == '__main__': 
     main()

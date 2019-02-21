@@ -20,6 +20,11 @@ class TestLab4(unittest.TestCase):
         comps = selection_sort(nums)
         self.assertEqual(nums, [26])
 
+    def test_sel_03(self):
+        nums = [54, 54]
+        comps = selection_sort(nums)
+        self.assertEqual(nums, [54, 54])
+
     def test_insert_01(self):
         nums = [54, 26, 93, 17, 77, 31, 44, 55, 20]
         comps = insertion_sort(nums)
@@ -30,10 +35,10 @@ class TestLab4(unittest.TestCase):
         comps = insertion_sort(nums)
         self.assertEqual(nums, [54])
 
-    def test_insert_02(self):
-        nums = [54]
+    def test_insert_03(self):
+        nums = [54, 54]
         comps = insertion_sort(nums)
-        self.assertEqual(nums, [54])
+        self.assertEqual(nums, [54, 54])
 
 if __name__ == '__main__': 
     unittest.main()
