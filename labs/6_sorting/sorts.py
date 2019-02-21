@@ -1,3 +1,7 @@
+"""
+Luis Gomez
+Selection and Insertion Sorting
+"""
 import random
 import time
 

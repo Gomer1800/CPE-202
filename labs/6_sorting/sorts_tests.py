@@ -1,3 +1,7 @@
+"""
+Luis Gomez
+Selection and Insertion Sorting
+"""
 import unittest
 from sorts import *
 import time
