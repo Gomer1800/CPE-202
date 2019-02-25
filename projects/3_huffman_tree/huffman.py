@@ -192,14 +192,14 @@ def huffman_encode(in_file, out_file):
             code_array = create_code( root_node)
             for char in char_list:
                 huff_code += code_array[ord(char)]
-            with open(out_file, 'w') as file_object:
+            with open(out_file, 'w', newline='') as file_object:
                 file_object.write( create_header(freq_list) + '\n')
                 file_object.write( huff_code)
         else:
             # generate empty out file
-            file_object = open(out_file, 'w')
+            file_object = open(out_file, 'w', newline='')
             file_object.close()
     except FileNotFoundError:
         raise FileNotFoundError("File Not Found")
-        with open(out_file, 'w') as file_object:
+        with open(out_file, 'w', newline='') as file_object:
             file_object.write("")
