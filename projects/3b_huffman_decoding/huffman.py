@@ -217,6 +217,8 @@ def huffman_decode(encoded_file, decoded_file):
     try:
         freq_list = []
         freq_not_read = True
+        # edge case flag for repeated single character
+        edge_case = True
         # huff code list
         huff_code = []
         # Read encoded file and prepare frequency list and huffman code list
@@ -230,10 +232,22 @@ def huffman_decode(encoded_file, decoded_file):
                 # Read huffman code
                 elif line != None:
                     huff_code = list(line)
+                    edge_case = False
+        # edge case, empty input file, output empty file
+        if freq_list == []:
+            with open(decoded_file, 'w', newline='') as file_object:
+                pass
+            return
         # Create Huff Tree using frequency list
         huff_tree_root = create_huff_tree( freq_list )
         # print(huff_tree_root)
         with open(decoded_file, 'w', newline='') as file_object:
+            if edge_case:
+                while huff_tree_root.freq != 0:
+                    # print(huff_code)
+                    file_object.write( chr(huff_decode_helper( huff_tree_root, huff_code)))
+                    huff_tree_root.freq -= 1
+
             while len(huff_code) != 0:
                 # print(huff_code)
                 file_object.write( chr(huff_decode_helper( huff_tree_root, huff_code)))
@@ -252,6 +266,8 @@ def huff_decode_helper( node, code ):
     # base case, leaf node reached
     # print(code)
     char = 0
+    if code == []:
+        return node.char
     if node.left == None and node.right == None:
         return node.char
     # traversal instruction, 0 is left, 1 is right
