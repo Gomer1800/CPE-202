@@ -1,4 +1,7 @@
-
+"""
+Luis Gomez
+Python Data Structures Practice
+"""
 class MyHashTable:
 
     def __init__(self, table_size=11):
@@ -21,17 +24,17 @@ class MyHashTable:
             self.num_items += 1
             self.hash_table[ hash_value ].append( (key, value) )
         else:
-            self.num_collisions += 1
             for i in range(len(self.hash_table[hash_value])):
                 print(self.hash_table[hash_value])
                 # case 2: duplicate key
                 if self.hash_table[hash_value][i][0] == key:
-                    self.hash_table[hash_value][i][1] = value
+                    self.hash_table[hash_value][i] = (key, value)
                     break
                 # case 3: unique key
                 if i == len(self.hash_table[hash_value])-1:
+                    self.num_collisions += 1
                     self.num_items += 1
-                    self.hash_table[hash_value].insert((key, value))
+                    self.hash_table[hash_value].insert(-1, (key, value))
 
         # check load factor
         if self.load_factor() > 1.5:
@@ -76,6 +79,7 @@ class MyHashTable:
         hash_value = key % self.table_size
         for i in range(len(self.hash_table[hash_value])):
             if self.hash_table[hash_value][i][0] == key:
+                self.num_items -= 1
                 return self.hash_table[hash_value].pop(i)
         raise LookupError
 
@@ -89,4 +93,4 @@ class MyHashTable:
 
     def collisions(self):
         "Returns the number of collisions that have occurred during insertions into the hash table"
-        return collisions
+        return self.num_collisions
