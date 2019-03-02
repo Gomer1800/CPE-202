@@ -25,7 +25,7 @@ class MyHashTable:
             self.hash_table[ hash_value ].append( (key, value) )
         else:
             for i in range(len(self.hash_table[hash_value])):
-                print(self.hash_table[hash_value])
+                # print(self.hash_table[hash_value])
                 # case 2: duplicate key
                 if self.hash_table[hash_value][i][0] == key:
                     self.hash_table[hash_value][i] = (key, value)
@@ -65,7 +65,7 @@ class MyHashTable:
         hash_value = key % self.table_size
         for i in range(len(self.hash_table[hash_value])):
             if self.hash_table[hash_value][i][0] == key:
-                print(self.hash_table[hash_value][i][1])
+                # print(self.hash_table[hash_value][i][1])
                 return self.hash_table[hash_value][i][1]
         raise LookupError
 
