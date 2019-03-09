@@ -19,6 +19,8 @@ class MaxHeap:
         self.num_items+=1
         self.heap_list.insert(self.num_items, item)
         self.perc_up(self.num_items)
+        print("End enqueue: ",self.heap_list)
+        return True
 
     def peek(self):
         """returns max without changing the heap, returns None if the heap is empty"""
@@ -29,7 +31,7 @@ class MaxHeap:
         """returns max and removes it from the heap and restores the heap property
            returns None if the heap is empty"""
         if self.is_empty(): return None
-        max, self.heap_list[1] = self.heap_list.pop(0), self.heap_list[self.num_items]
+        max, self.heap_list[1] = self.heap_list[1], self.heap_list.pop(self.num_items)
         self.num_items-=1
         self.perc_down(1)
         return max
@@ -37,7 +39,7 @@ class MaxHeap:
     def contents(self):
         """returns a list of contents of the heap in the order it is stored internal to the heap.
         (This may be useful for in testing your implementation.)"""
-        return self.heap_list
+        return self.heap_list[1:self.num_items+1]
 
     def build_heap(self, alist):
         """Discards the items in the current heap and builds a heap from 
@@ -50,13 +52,19 @@ class MaxHeap:
         if self.heap_size-1 < len(alist):
             self.heap_list = [None].extend(alist)
             self.heap_size = len(self.heap_list)
+            print("Case small: ",self.heap_list)
         # Case, current heap is large enough
         else:
             alist.insert(0,None)
-            self.heap_list = alist.extend([]*(self.heap_size-len(alist)))
-        i = self.num_items
-        while i > 0:
-            perc_up(i)
+            # print(alist)
+            alist.extend([None]*(self.heap_size-len(alist))) 
+            self.heap_list = alist
+            print("Case big: ",self.heap_list)
+        i = self.num_items//2
+        while i >= 1:
+            self.perc_down(i)
+            i-=1
+        print("End Build: ",self.heap_list)
 
     def is_empty(self):
         """returns True if the heap is empty, false otherwise"""
@@ -83,27 +91,54 @@ class MaxHeap:
         if i is None: raise ValueError  # edge case, invalid index
         if i <= 0: raise ValueError
         if i > self.num_items: raise ValueError
-        if i == 1: return               # edge case, index is top of tree
-        child = i*2
+        if i == self.num_items: return               # edge case, index is top of tree
+        left = 0
+        right = 0
+        # starting right most child
+        child = self.find_child( i )
         # iterate through child nodes
-        while child < self.num_items:
-            # current value < left child?
-            if self.heap_list[i] < self.heap_list[child]:
-                # swap positions if true
-                self.heap_list[i], self.heap_list[child] = self.heap_list[child], self.heap_list[i]
+        while child >= self.num_items//2:
+            print("perc down: ", child, self.contents())
+            left, right = 0, 0
+            # Case, even child
+            if child % 2 == 0:
+                if self.heap_list[i] < self.heap_list[child]:
+                    # swap positions if true
+                    self.heap_list[i], self.heap_list[child] = self.heap_list[child], self.heap_list[i]
+                    # change current index, change child index
+                    new_child = self.find_child( child )
+                    i, child = child, new_child
+                    continue
+            # Case, odd chid
+            if child % 2 == 1:
+                # which child is greater?
+                if self.heap_list[i] < self.heap_list[child]: right = child
+                if self.heap_list[i] < self.heap_list[child-1]: left = child-1
+                if self.heap_list[child] < self.heap_list[child-1]:
+                    child = child-1
+                # current value < left child?
+                if child != 0:
+                    if self.heap_list[i] < self.heap_list[child]:
+                        # swap positions if true
+                        self.heap_list[i], self.heap_list[child] = self.heap_list[child], self.heap_list[i]
                 # change current index, change child index
-                i, child = child, child*2
+                new_child = self.find_child( child )
+                i, child = child, new_child
                 continue
-            if child+1 > num_items: break
-            child = child+1
-            # current value < right child?
-            if self.heap_list[i] < self.heap_list[child]:
-                # swap positions if true
-                self.heap_list[i], self.heap_list[child] = self.heap_list[child], self.heap_list[i]
-                # change current index, change child index
-                i, child = child, child*2
-                continue
-            else: break
+            break
+
+    def find_child(self,i):
+        print("find i = ",i)
+        child = 0
+        try:
+            child = self.heap_list.index(self.contents()[i*2])
+            print("try " , child)
+        except Exception:
+            child = self.heap_list.index(self.contents()[i*2-1])
+            print("except " ,child)
+        finally:
+            print("finally " ,child)
+            return child
 
     def perc_up(self, i):
         """where the parameter i is an index in the heap and perc_up moves the element stored
@@ -112,14 +147,14 @@ class MaxHeap:
         if i <= 0: raise ValueError
         if i > self.num_items: raise ValueError
         if i == 1: return               # edge case, index is top of tree
-
         parent = i//2
         # iterate through parent nodes
-        while parent > 1:
+        while parent > 0:
+            print("perc up: ", parent, self.contents())
             # current value > parent?
-            if heap_list[i] > heap_list[parent]:
+            if self.heap_list[i] > self.heap_list[parent]:
                 # swap positions if true
-                heap_list[i], heap_list[parent] = heap_list[parent], heap_list[i]
+                self.heap_list[i], self.heap_list[parent] = self.heap_list[parent], self.heap_list[i]
                 # change current index, change parent index
                 i, parent = parent, parent//2
             # cannot perc up further
