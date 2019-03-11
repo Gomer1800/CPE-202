@@ -1,3 +1,15 @@
+"""
+Luis Gomez
+Python Data Structures
+
+Hashtable, with quadratic probing collision resolution. To be used in making a concordance dictionary.
+
+Hash Value = Horners Rule, H(key)
+
+Hash table consists of (key, value) tuples, whereby:
+    - Key is a string
+    - Value is a list, presumably of integers
+"""
 class HashTable:
 
     def __init__(self, table_size):         # can add additional attributes
@@ -19,11 +31,10 @@ class HashTable:
         hash_value = self.horner_hash(key)
         """2, insert key and resolve collisions"""
         i = 0
-        index = 0
+        index = hash_value + i**2
         while 1:
             try:
-                index = hash_value + i**2
-                # print("Insert: ", index)
+                # print("Insert i, index: ",i, index)
                 tup = self.hash_table[index]
                 """Case 1, no collision"""
                 if tup is None:             # unique key
@@ -35,22 +46,27 @@ class HashTable:
                     self.hash_table[index][1].append(value)
                     break
                 i+=1                        # key does not match, quadratic probe
+                index = hash_value + i**2
             except Exception:
                 index = (hash_value + i**2) % self.table_size
+                # print("Insert, new index",index)
+                # print("Insert, table",self.hash_table)
         """3, check load factor, increase table if needed"""
         if self.get_load_factor() > .5:
+            # print("Insert load factor: ",self.get_load_factor())
             self.increase_table_size()
     
     def increase_table_size(self):
-        # initialize new table with increased size
+        """initialize new table with increased size"""
         new_table  = HashTable(self.table_size*2 + 1)
-        # populate new hash table with previous values
-        for i in range(self.table_size), self.hash_table[i] is not None:
-            tup = self.hash_table[i]
-            # for each line number in list, insert the key. Insert checks load factor
-            for j in range(len(tup[1])):
-                new_table.insert(tup[0], tup[1][j])
-        # reassign self.hash_table and self.table_size
+        """populate new hash table with previous values"""
+        for i in range(self.table_size):
+            if self.hash_table[i] is not None:
+                tup = self.hash_table[i]
+                """for each line number in list, insert the key. Insert checks load factor"""
+                for j in range(len(tup[1])):
+                    new_table.insert(tup[0], tup[1][j])
+        """reassign self.hash_table and self.table_size"""
         self.table_size = new_table.table_size
         self.hash_table = new_table.hash_table
 
@@ -75,13 +91,11 @@ class HashTable:
         # print("Horner mod: ", hash_value % self.table_size)
         return hash_value % self.table_size
 
-    def quadratic_probe(self, index):
-        pass
-
     def in_table(self, key):
         """ Returns True if key is in an entry of the hash table, False otherwise."""
         index = self.get_index(key)
-        if index is not None:
+        # print("In Table, index: ", index)
+        if index != None:
             return True
         else:
             return False
@@ -89,19 +103,17 @@ class HashTable:
     def get_index(self, key): # BUG, quadratic probing needs fixing
         """ Returns the index of the hash table entry containing the provided key. 
         If there is not an entry with the provided key, returns None."""
-        while 1:
         try:
             key = key.lower() # render key all lower case, to ease comparison
-            hash_value = self.horner_hash(key)
-            i = 0
-            """Checks default hash value index, otherwise begins quadratic probing"""
-            while 1:
-                value == self.hash_table[hash_value + i**2]
-                if value[0] == key:
-                    return hash_value + i**2
-                i+=1
+            for tup in self.hash_table:
+                # print("Get Index tup: ", tup)
+                if tup is not None:
+                    # print("Get Index key1 key 2: ", key, tup[0])
+                    if tup[0] == key:
+                        # print("Get Index return: ",self.hash_table.index(tup))
+                        return self.hash_table.index(tup)
         except Exception:
-            """Key not in hash table"""
+            """Invalid Key not in hash table"""
             return None
 
     def get_all_keys(self):
