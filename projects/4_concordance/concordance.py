@@ -11,6 +11,12 @@ class Concordance:
         """ Read stop words from input file (filename) and insert each word as a key into the stop words hash table.
         Starting size of hash table should be 191: self.stop_table = HashTable(191)
         If file does not exist, raise FileNotFoundError"""
+        self.stop_table = HashTable(191)
+        try:
+            pass
+        except FileNotFoundError:
+            raise FileNotFoundError("Load-stop-table: File not found")
+
 
     def load_concordance_table(self, filename):
         """ Read words from input text file (filename) and insert them into the concordance hash table, 
