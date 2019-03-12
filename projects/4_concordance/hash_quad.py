@@ -17,7 +17,7 @@ class HashTable:
         self.hash_table = [None]*table_size # hash table
         self.num_items = 0                  # empty hash table
 
-    def insert(self, key, value):
+    def insert(self, key, value=0):
         """ 
         1)  Inserts an entry into the hash table (using Horner hash function to determine index, and quadratic probing to resolve collisions).
             -The key is a string (a word) to be entered, and value is the line number that the word appears on. 
@@ -37,17 +37,22 @@ class HashTable:
                 # print("Insert i, index: ",i, index)
                 tup = self.hash_table[index]
                 """Case 1, no collision"""
-                if tup is None:             # unique key
+                if tup is None:                     # unique key
                     self.hash_table[index] = (key, [value])
                     self.num_items+=1
                     break
                 """Case 2, collision"""
-                if tup[0] == key:         # key matched
-                    self.hash_table[index][1].append(value)
+                if tup[0] == key:                   # key matched
+                    try:
+                        tup[1].index(value)
+                    except ValueError:
+                        self.hash_table[index][1].append(value)
+                    finally:
+                        break
                     break
-                i+=1                        # key does not match, quadratic probe
-                index = hash_value + i**2
-            except Exception:
+                i+=1
+                index = hash_value + i**2           # key does not match, quadratic probe
+            except Exception: 
                 index = (hash_value + i**2) % self.table_size
                 # print("Insert, new index",index)
                 # print("Insert, table",self.hash_table)
@@ -100,7 +105,7 @@ class HashTable:
         else:
             return False
 
-    def get_index(self, key): # BUG, quadratic probing needs fixing
+    def get_index(self, key):
         """ Returns the index of the hash table entry containing the provided key. 
         If there is not an entry with the provided key, returns None."""
         try:
